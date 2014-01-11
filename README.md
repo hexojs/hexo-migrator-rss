@@ -1,28 +1,19 @@
-# [Hexo] Plugins
+# RSS migrator
 
-Official plugins for [Hexo].
+Migrate your blog from RSS to [Hexo].
 
-- [Plugin List](https://github.com/tommy351/hexo/wiki/Plugins)
-- [Plugin development](http://zespia.tw/hexo/docs/plugins.html)
+## Install
+
+```
+$ npm install hexo-migrator-rss --save
+```
 
 ## Usage
 
-### Install
+Execute the following command after installed. `source` is the file path or URL of RSS.
 
 ```
-npm install <plugin-name> --save
-```
-
-### Update
-
-```
-npm update
-```
-
-### Uninstall
-
-```
-npm uninstall <plugin-name>
+hexo migrate rss <source>
 ```
 
 [Hexo]: http://zespia.tw/hexo
