@@ -48,7 +48,7 @@ hexo.extend.migrator.register('rss', function(args, callback){
       posts.push({
         title: item.title,
         date: item.date,
-        tags: item.tags,
+        tags: item.categories,
         content: tomd(item.description)
       });
 
