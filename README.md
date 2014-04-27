@@ -4,7 +4,7 @@ Migrate your blog from RSS to [Hexo].
 
 ## Install
 
-```
+``` bash
 $ npm install hexo-migrator-rss --save
 ```
 
@@ -12,8 +12,8 @@ $ npm install hexo-migrator-rss --save
 
 Execute the following command after installed. `source` is the file path or URL of RSS.
 
-```
-hexo migrate rss <source>
+``` bash
+$ hexo migrate rss <source>
 ```
 
 [Hexo]: http://zespia.tw/hexo
