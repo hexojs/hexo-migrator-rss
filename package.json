@@ -1,6 +1,6 @@
 {
   "name": "hexo-migrator-rss",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "RSS migrator plugin for Hexo",
   "main": "index",
   "repository": {
@@ -23,9 +23,9 @@
     "url": "https://raw.github.com/hexojs/hexo-migrator-rss/master/LICENSE"
   },
   "dependencies": {
-    "async": "0.7.0",
+    "async": "^0.9.0",
     "to-markdown": "0.0.1",
     "feedparser": "0.16.6",
-    "request": "2.34.0"
+    "request": "^2.36.0"
   }
 }
