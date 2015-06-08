@@ -20,6 +20,7 @@ hexo.extend.migrator.register('rss', function(args, callback){
 
   var log = hexo.log,
     post = hexo.post,
+    untitledPostCounter = 0,
     stream;
 
   // URL regular expression from: http://blog.mattheworiordan.com/post/13174566389/url-regular-expression-for-links-with-or-without-the
@@ -45,6 +46,16 @@ hexo.extend.migrator.register('rss', function(args, callback){
       item;
 
     while (item = stream.read()){
+
+      if(!item.title) {
+        untitledPostCounter += 1;
+        var untitledPostTitle = "Untitled Post - " + untitledPostCounter
+        item.title = untitledPostTitle;
+        log.w("Post found but without any titles. Using %s", untitledPostTitle)
+      } else {
+        log.i('Post found: %s', item.title);
+      }
+
       posts.push({
         title: item.title,
         date: item.date,
@@ -52,7 +63,6 @@ hexo.extend.migrator.register('rss', function(args, callback){
         content: tomd(item.description)
       });
 
-      log.i('Post found: %s', item.title);
     }
   });
 
@@ -62,6 +72,7 @@ hexo.extend.migrator.register('rss', function(args, callback){
     }, function(err){
       if (err) return callback(err);
 
+      log.w('%d posts did not have titles and were prefixed with "Untitled Post".', untitledPostCounter);
       log.i('%d posts migrated.', posts.length);
       callback();
     });
