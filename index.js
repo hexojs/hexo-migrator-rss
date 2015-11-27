@@ -2,6 +2,7 @@ var FeedParser = require('feedparser'),
   async = require('async'),
   tomd = require('to-markdown').toMarkdown,
   request = require('request'),
+  url = require('url'),
   fs = require('fs');
 
 hexo.extend.migrator.register('rss', function(args, callback){
@@ -57,12 +58,16 @@ hexo.extend.migrator.register('rss', function(args, callback){
       }
 
       posts.push({
+    while (item = stream.read()){      
+      posts.push({        
         title: item.title,
         date: item.date,
         tags: item.categories,
+        alias: url.parse(item.link).pathname,
         content: tomd(item.description)
       });
 
+      log.i('Post found: %s', item.title);
     }
   });
 
@@ -72,7 +77,6 @@ hexo.extend.migrator.register('rss', function(args, callback){
     }, function(err){
       if (err) return callback(err);
 
-      log.w('%d posts did not have titles and were prefixed with "Untitled Post".', untitledPostCounter);
       log.i('%d posts migrated.', posts.length);
       callback();
     });
