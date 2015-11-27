@@ -57,8 +57,6 @@ hexo.extend.migrator.register('rss', function(args, callback){
         log.i('Post found: %s', item.title);
       }
 
-      posts.push({
-    while (item = stream.read()){      
       posts.push({        
         title: item.title,
         date: item.date,
@@ -67,7 +65,6 @@ hexo.extend.migrator.register('rss', function(args, callback){
         content: tomd(item.description)
       });
 
-      log.i('Post found: %s', item.title);
     }
   });
 
