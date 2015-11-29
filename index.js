@@ -6,8 +6,8 @@ var FeedParser = require('feedparser'),
   fs = require('fs');
 
 hexo.extend.migrator.register('rss', function(args, callback){
-  var source = args._.shift();    
-  
+  var source = args._.shift();
+
   if (!source){
     var help = [
       'Usage: hexo migrate rss <source> [--alias]',
@@ -57,10 +57,10 @@ hexo.extend.migrator.register('rss', function(args, callback){
         log.i('Post found: %s', item.title);
       }
       
-      var newPost = {        
+      var newPost = {
         title: item.title,
         date: item.date,
-        tags: item.categories, 
+        tags: item.categories,
         content: tomd(item.description)
       };
       
@@ -79,6 +79,7 @@ hexo.extend.migrator.register('rss', function(args, callback){
     }, function(err){
       if (err) return callback(err);
 
+      log.w('%d posts did not have titles and were prefixed with "Untitled Post".', untitledPostCounter);
       log.i('%d posts migrated.', posts.length);
       callback();
     });
