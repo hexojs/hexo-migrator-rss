@@ -6,11 +6,11 @@ var FeedParser = require('feedparser'),
   fs = require('fs');
 
 hexo.extend.migrator.register('rss', function(args, callback){
-  var source = args._.shift();
-
+  var source = args._.shift();    
+  
   if (!source){
     var help = [
-      'Usage: hexo migrate rss <source>',
+      'Usage: hexo migrate rss <source> [--alias]',
       '',
       'For more help, you can check the docs: http://hexo.io/docs/migration.html'
     ];
@@ -56,14 +56,19 @@ hexo.extend.migrator.register('rss', function(args, callback){
       } else {
         log.i('Post found: %s', item.title);
       }
-
-      posts.push({        
+      
+      var newPost = {        
         title: item.title,
         date: item.date,
-        tags: item.categories,
-        alias: url.parse(item.link).pathname,
+        tags: item.categories, 
         content: tomd(item.description)
-      });
+      };
+      
+      if (args.alias) {
+        newPost.alias = url.parse(item.link).pathname;
+      }      
+
+      posts.push(newPost);
 
     }
   });
