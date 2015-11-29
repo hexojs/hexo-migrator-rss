@@ -24,9 +24,13 @@
   },
   "dependencies": {
     "async": "^0.9.0",
-    "to-markdown": "0.0.1",
+    "chai": "^3.4.1",
     "feedparser": "0.16.6",
     "request": "^2.36.0",
+    "to-markdown": "0.0.1",
     "url": "^0.11.0"
+  },
+  "scripts": {
+    "test": "mocha test"
   }
 }
