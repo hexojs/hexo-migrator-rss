@@ -44,13 +44,5 @@ describe("migrator rss", function () {
 			}, 500);
 		});
 	});	
-	
-	// context("passed --alias option", function() {
-	// 	it("adds alias", function(done) {
-	// 		ctx.hexo.call("migrate", {_:["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml", "--alias"]});
-	// 		ctx.hexo.setValues.receivedPosts[0].alias.should.exists();
-	//  		done();	  
-	// 	});
-	// });	
 });
 
