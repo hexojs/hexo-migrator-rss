@@ -3,10 +3,9 @@
 var should = require('chai').should(),
 	migrator = require('../migrator.js'),
 	fakehexoFactory = require('./fakehexoFactory.js'),
-    fakeHexo
+    fakeHexo;
 
-
-describe("migrator rss", function () {	
+describe("migrator rss", function () {
 	beforeEach(function () {
 		fakeHexo = fakehexoFactory.create();
 		migrator.registerMigrator(fakeHexo);
@@ -37,7 +36,7 @@ describe("migrator rss", function () {
 
 	context("passed source with alias flag", function () {
 		it("creates posts with alias", function (done) {
-			fakeHexo.call("migrate", { _: ["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"], alias:true });
+			fakeHexo.call("migrate", { _: ["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"], alias: true });
 			setTimeout(function () {
 				fakeHexo.setValues.receivedPosts.length.should.be.gt(0);
 				should.exist(fakeHexo.setValues.receivedPosts[0].alias, "alias missing");
