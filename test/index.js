@@ -1,72 +1,48 @@
 'use strict';
 
 var should = require('chai').should(),
-	ctx = {
-		hexo : (function() {
-			var mock = {}; 
-			mock.setValues = 
-			{	
-				registeredType: null, 
-				receivedPosts: [],
-				callback: null,
-				calledType: null
-			};
-			mock.extend = {};
-			mock.extend.migrator = {};
-			mock.extend.migrator.register = function(type, f) {
-				mock.setValues.registeredType = type;
-				mock.setValues.callback = f;
-			};
-			mock.call =  function(type, args) {
-				mock.setValues.calledType = args._.shift();
-				//replicate hexo logic to move flags
-				var newArgs = {_: []}
-				if (args._.length > 0)
-				{
-					newArgs._.push(args._.shift());
-				} 		
-				mock.setValues.callback(newArgs, function(){});
-				
-			};
-			mock.log = {
-				i: function() {},
-				w: function() {}				
-			};
-			mock.post = {
-				create : function(newPost) {
-					mock.setValues.receivedPosts.push(newPost);
-				}
-			};
-			return mock;
-		})()
-	};
+	migrator = require('../migrator.js'),
+	fakehexoFactory = require('./fakehexoFactory.js'),
+    fakeHexo
 
 
-describe("migrator rss", function() {
-      this.timeout(10000);
-	beforeEach(function() {  
-		GLOBAL.hexo = ctx.hexo;
-		require("../index.js");
+describe("migrator rss", function () {	
+	beforeEach(function () {
+		fakeHexo = fakehexoFactory.create();
+		migrator.registerMigrator(fakeHexo);
 	});
-	
-	it("registers \"rss\" to hexo", function()
-	{
-	   ctx.hexo.setValues.registeredType.should.equal("rss");
+
+	it("registers \"rss\" to hexo", function () {
+		fakeHexo.setValues.registeredType.should.equal("rss");
 	});
- 
-    context("called with \"rss\"", function()
-	{
-		it("parameter passed through", function() {
-			ctx.hexo.call("migrate", {_:["rss"]});
-			ctx.hexo.setValues.calledType.should.equal("rss");
+
+    context("called with \"rss\"", function () {
+		it("passes parameter through", function () {
+			fakeHexo.call("migrate", { _: ["rss"] });
+			fakeHexo.setValues.calledType.should.equal("rss");
 		})
-	   
+
 	});
- 	context("passed source", function() {
-		it("creates posts", function(done) {
-			ctx.hexo.call("migrate", {_:["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"]});
-			ctx.hexo.setValues.receivedPosts.length.should.be.gt(0);
-	 		done();	  
+
+	context("passed source without alias flag", function () {
+		it("creates posts without alias", function (done) {
+			fakeHexo.call("migrate", { _: ["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"] });
+			setTimeout(function () {
+				fakeHexo.setValues.receivedPosts.length.should.be.gt(0);
+				should.not.exist(fakeHexo.setValues.receivedPosts[0].alias);
+				done();
+			}, 500);
+		});
+	});
+
+	context("passed source with alias flag", function () {
+		it("creates posts with alias", function (done) {
+			fakeHexo.call("migrate", { _: ["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"], alias:true });
+			setTimeout(function () {
+				fakeHexo.setValues.receivedPosts.length.should.be.gt(0);
+				should.exist(fakeHexo.setValues.receivedPosts[0].alias, "alias missing");
+				done();
+			}, 500);
 		});
 	});	
 	
