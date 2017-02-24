@@ -17,7 +17,8 @@ $ hexo migrate rss <source> [OPTIONS]
 ```
 
 ### OPTIONS
-```--alias 	Populates the `alias` setting in the front-matter, 
+```
+--alias 	Populates the `alias` setting in the front-matter, 
 			for use with the [hexo-generator-alias](http://github.com/hexojs/hexo-generator-alias) module. 
 			This is useful for generating redirects.
 --limit 	Limits the number of posts migrated to your blog. 
