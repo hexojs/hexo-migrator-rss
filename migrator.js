@@ -49,6 +49,10 @@ exports.registerMigrator = function (hexo) {
 
       while (item = stream.read()) {
 
+        if (args.limit && posts.length >= args.limit) {
+          continue;
+        }
+
         if (!item.title) {
           untitledPostCounter += 1;
           var untitledPostTitle = "Untitled Post - " + untitledPostCounter
