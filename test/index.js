@@ -28,25 +28,7 @@ describe("migrator", function () {
     });
   });
 
-  context("limit flag passed", function () {
-
-    it("creates limited number of posts", function (done) {
-      fakeHexo.call("migrate", { _: ["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"], limit: 1 },
-        function (err) {
-          if (err) throw err;
-          fakeHexo.setValues.receivedPosts.length.should.equal(1);
-          done();
-        });
-      fakeHexo.call("migrate", { _: ["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"], limit: 2 },
-        function (err) {
-          if (err) throw err;
-          fakeHexo.setValues.receivedPosts.length.should.equal(2);
-          done();
-        });
-    });
-  });
-
-  context("alias flag not passed", function () {
+  context("no flags passed", function () {
 
     it("creates posts without alias field", function (done) {
       fakeHexo.call("migrate", { _: ["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"] },
@@ -70,5 +52,35 @@ describe("migrator", function () {
         });
     });
   });
+
+  context("limit flag passed", function () {
+
+    it("creates limited number of posts", function (done) {
+      fakeHexo.call("migrate", { _: ["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"], limit: 1 },
+        function (err) {
+          if (err) throw err;
+          fakeHexo.setValues.receivedPosts.length.should.equal(1);
+          done();
+        });
+      fakeHexo.call("migrate", { _: ["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"], limit: 2 },
+        function (err) {
+          if (err) throw err;
+          fakeHexo.setValues.receivedPosts.length.should.equal(2);
+          done();
+        });
+    });
+  });
+
+  context("preventDuplicates flag passed", function () {
+    it("does not duplicate posts with the same title", function (done) {
+      fakeHexo.call("migrate", { _: ["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"], preventDuplicates: 1 },
+        function (err) {
+          if (err) throw err;
+          fakeHexo.setValues.receivedPosts.length.should.equal(2);
+          done();
+        });
+    });
+  });
+
 });
 

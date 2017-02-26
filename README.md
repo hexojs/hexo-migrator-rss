@@ -21,10 +21,12 @@ $ hexo migrate rss <source> [OPTIONS]
 ```
 
 ### OPTIONS
---alias 	Populates the `alias` setting in the front-matter, 
-			for use with the [hexo-generator-alias](http://github.com/hexojs/hexo-generator-alias) module. 
-			This is useful for generating redirects.
---limit 	Limits the number of posts migrated to your blog. 
-			Takes integer value (limit 3)
+--alias 				Populates the `alias` setting in the front-matter, 
+						for use with the [hexo-generator-alias](http://github.com/hexojs/hexo-generator-alias) module. 
+						This is useful for generating redirects.
+--limit 				Limits the number of posts migrated to your blog. 
+						Takes integer value (limit 3)
+--preventDuplicates 	If there are any titles that already exist in your blog that also
+						exist in the RSS feed you are migrating they will be skipped
 
 [Hexo]: http://zespia.tw/hexo

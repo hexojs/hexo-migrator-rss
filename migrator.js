@@ -3,11 +3,13 @@ var FeedParser = require('feedparser'),
   tomd = require('to-markdown').toMarkdown,
   request = require('request'),
   url = require('url'),
-  fs = require('fs');
+  fs = require('fs'),
+  util = require('hexo-util');
 
-exports.registerMigrator = function (hexo) {  
+exports.registerMigrator = function (hexo) {
   hexo.extend.migrator.register('rss', function (args, callback) {
     var source = args._.shift();
+    var preventDuplicates = args.preventDuplicates !== 'undefined'
 
     if (!source) {
       var help = [
@@ -24,6 +26,20 @@ exports.registerMigrator = function (hexo) {
       post = hexo.post,
       untitledPostCounter = 0,
       stream;
+
+    if (preventDuplicates) {
+      var fileNames = [];
+      var postsFolder = process.cwd() + '/source/_posts/';
+      fs.readdir(postsFolder, (err, files) => {
+        if (!files || err) {
+    console.log(1111, err, process.cwd() );
+          log.w('No files: %s', err);
+          return;
+        }
+        // Get the file name up until the period
+        fileNames = files.map(file=>file.split('.')[0]);
+      });
+    }
 
     // URL regular expression from: http://blog.mattheworiordan.com/post/13174566389/url-regular-expression-for-links-with-or-without-the
     if (source.match(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[.\!\/\\w]*))?)/)) {
@@ -62,6 +78,11 @@ exports.registerMigrator = function (hexo) {
           log.i('Post found: %s', item.title);
         }
 
+        if (preventDuplicates && fileNames.indexOf(util.slugize(item.title)) >= 0) {
+          log.w('Post already exists with the title "%s"', item.title);
+          continue;
+        }
+
         var newPost = {
           title: item.title,
           date: item.date,
@@ -79,11 +100,13 @@ exports.registerMigrator = function (hexo) {
     });
 
     stream.on('end', function () {
+
       async.each(posts, function (item, next) {
         post.create(item, next);
       }, function (err) {
-        if (err) return callback(err);
-
+        if (err) {
+          return callback(err);
+        }
         log.w('%d posts did not have titles and were prefixed with "Untitled Post".', untitledPostCounter);
         log.i('%d posts migrated.', posts.length);
         callback();
