@@ -72,6 +72,15 @@ describe("migrator", function () {
   });
 
   context("preventDuplicates flag passed", function () {
+    it("grabs all posts, even duplicates", function (done) {
+      fakeHexo.call("migrate", { _: ["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"] },
+        function (err) {
+          if (err) throw err;
+          fakeHexo.setValues.receivedPosts.length.should.equal(4);
+          done();
+        });
+    });
+    
     it("does not duplicate posts with the same title", function (done) {
       fakeHexo.call("migrate", { _: ["rss", "https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml"], preventDuplicates: 1 },
         function (err) {

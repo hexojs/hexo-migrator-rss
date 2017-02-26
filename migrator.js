@@ -9,7 +9,7 @@ var FeedParser = require('feedparser'),
 exports.registerMigrator = function (hexo) {
   hexo.extend.migrator.register('rss', function (args, callback) {
     var source = args._.shift();
-    var preventDuplicates = args.preventDuplicates !== 'undefined'
+    var preventDuplicates = args.preventDuplicates !== undefined;
 
     if (!source) {
       var help = [
@@ -32,7 +32,6 @@ exports.registerMigrator = function (hexo) {
       var postsFolder = process.cwd() + '/source/_posts/';
       fs.readdir(postsFolder, (err, files) => {
         if (!files || err) {
-    console.log(1111, err, process.cwd() );
           log.w('No files: %s', err);
           return;
         }
