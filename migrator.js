@@ -32,7 +32,6 @@ exports.registerMigrator = function (hexo) {
       var postsFolder = process.cwd() + '/source/_posts/';
       fs.readdir(postsFolder, (err, files) => {
         if (!files || err) {
-    console.log(1111, err, process.cwd() );
           log.w('No files: %s', err);
           return;
         }
