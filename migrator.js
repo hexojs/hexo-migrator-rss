@@ -62,7 +62,7 @@ exports.registerMigrator = function (hexo) {
           title: item.title,
           date: item.date,
           tags: item.categories,
-          content: tomd(item.description)
+          content: tomd(item.description || '')
         };
 
         if (args.alias) {
