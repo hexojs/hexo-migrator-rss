@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "async": "^0.9.0",
-    "chai": "^3.4.1",
+    "chai": "^4.2.0",
     "feedparser": "0.16.6",
     "request": "^2.36.0",
     "to-markdown": "0.0.1",
