@@ -23,13 +23,13 @@
     "url": "https://raw.github.com/hexojs/hexo-migrator-rss/master/LICENSE"
   },
   "dependencies": {
-    "async": "^0.9.0",
-    "chai": "^3.4.1",
-    "feedparser": "0.16.6",
+    "async": "^2.6.1",
+    "chai": "^4.2.0",
+    "feedparser": "2.2.9",
     "hexo-util": "^0.6.0",
-    "mocha": "^3.2.0",
-    "request": "^2.36.0",
-    "to-markdown": "0.0.1",
+    "mocha": "^4.0.0",
+    "request": "^2.88.0",
+    "turndown": "^5.0.1",
     "url": "^0.11.0"
   },
   "scripts": {
