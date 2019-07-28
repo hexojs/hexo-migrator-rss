@@ -1,12 +1,14 @@
-var FeedParser = require('feedparser'),
-  async = require('async'),
-  tomd = require('to-markdown').toMarkdown,
-  request = require('request'),
-  url = require('url'),
-  fs = require('fs');
+'use strict';
 
-exports.registerMigrator = function (hexo) {  
-  hexo.extend.migrator.register('rss', function (args, callback) {
+var FeedParser = require('feedparser');
+var async = require('async');
+var tomd = require('to-markdown').toMarkdown;
+var request = require('request');
+var url = require('url');
+var fs = require('fs');
+
+exports.registerMigrator = function(hexo) {
+  hexo.extend.migrator.register('rss', function(args, callback) {
     var source = args._.shift();
 
     if (!source) {
@@ -20,13 +22,13 @@ exports.registerMigrator = function (hexo) {
       return callback();
     }
 
-    var log = hexo.log,
-      post = hexo.post,
-      untitledPostCounter = 0,
-      stream;
+    var log = hexo.log;
+    var post = hexo.post;
+    var untitledPostCounter = 0;
+    var stream;
 
     // URL regular expression from: http://blog.mattheworiordan.com/post/13174566389/url-regular-expression-for-links-with-or-without-the
-    if (source.match(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[.\!\/\\w]*))?)/)) {
+    if (source.match(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\w]*))?)/)) {
       stream = request(source);
     } else {
       stream = fs.createReadStream(source);
@@ -34,26 +36,24 @@ exports.registerMigrator = function (hexo) {
 
     log.i('Analyzing %s...', source);
 
-    var feedparser = new FeedParser(),
-      posts = [];
+    var feedparser = new FeedParser();
+    var posts = [];
 
     stream.pipe(feedparser)
       .on('error', callback);
 
     feedparser.on('error', callback);
 
-    feedparser.on('readable', function () {
-      var stream = this,
-        meta = this.meta,
-        item;
+    feedparser.on('readable', function() {
+      var stream = this;
+      var item = stream.read();
 
-      while (item = stream.read()) {
-
+      while (stream.read()) {
         if (!item.title) {
           untitledPostCounter += 1;
-          var untitledPostTitle = "Untitled Post - " + untitledPostCounter
+          var untitledPostTitle = 'Untitled Post - ' + untitledPostCounter;
           item.title = untitledPostTitle;
-          log.w("Post found but without any titles. Using %s", untitledPostTitle)
+          log.w('Post found but without any titles. Using %s', untitledPostTitle);
         } else {
           log.i('Post found: %s', item.title);
         }
@@ -70,14 +70,13 @@ exports.registerMigrator = function (hexo) {
         }
 
         posts.push(newPost);
-
       }
     });
 
-    stream.on('end', function () {
-      async.each(posts, function (item, next) {
+    stream.on('end', function() {
+      async.each(posts, function(item, next) {
         post.create(item, next);
-      }, function (err) {
+      }, function(err) {
         if (err) return callback(err);
 
         log.w('%d posts did not have titles and were prefixed with "Untitled Post".', untitledPostCounter);
@@ -86,4 +85,4 @@ exports.registerMigrator = function (hexo) {
       });
     });
   });
-}
+};
