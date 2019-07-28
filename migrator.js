@@ -46,9 +46,10 @@ exports.registerMigrator = function(hexo) {
 
     feedparser.on('readable', function() {
       var stream = this;
-      var item = stream.read();
+      var item;
 
-      while (stream.read()) {
+      while (item = stream.read()) { // eslint-disable-line
+
         if (!item.title) {
           untitledPostCounter += 1;
           var untitledPostTitle = 'Untitled Post - ' + untitledPostCounter;
@@ -70,6 +71,7 @@ exports.registerMigrator = function(hexo) {
         }
 
         posts.push(newPost);
+
       }
     });
 
