@@ -1,7 +1,7 @@
 'use strict';
 
 var should = require('chai').should(); // eslint-disable-line
-var migrator = require('../migrator.js');
+var migrator = require('../lib/migrator.js');
 var fakehexoFactory = require('./fakehexoFactory.js');
 var fakeHexo;
 

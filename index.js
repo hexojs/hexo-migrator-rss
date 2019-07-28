@@ -1,6 +1,7 @@
 /* global hexo */
 'use strict';
 
-var migrator = require('./migrator.js');
+var migrator = require('./lib/migrator.js');
 
 migrator.registerMigrator(hexo);
+
