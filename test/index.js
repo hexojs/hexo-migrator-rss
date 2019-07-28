@@ -34,7 +34,7 @@ describe('migrator', function() {
       fakeHexo.call('migrate', { _: ['rss', 'https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml'] },
         function(err) {
           if (err) throw err;
-          fakeHexo.setValues.receivedPosts.length.should.eql(0);
+          fakeHexo.setValues.receivedPosts.length.should.be.gt(0);
           should.not.exist(fakeHexo.setValues.receivedPosts[0].alias);
           done();
         });
@@ -46,7 +46,7 @@ describe('migrator', function() {
       fakeHexo.call('migrate', { _: ['rss', 'https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml'], alias: true },
         function(err) {
           if (err) throw err;
-          fakeHexo.setValues.receivedPosts.length.should.eql(0);
+          fakeHexo.setValues.receivedPosts.length.should.be.gt(0);
           should.exist(fakeHexo.setValues.receivedPosts[0].alias, 'alias missing');
           done();
         });
