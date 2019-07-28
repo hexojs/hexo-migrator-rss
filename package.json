@@ -2,7 +2,14 @@
   "name": "hexo-migrator-rss",
   "version": "0.1.4",
   "description": "RSS migrator plugin for Hexo",
-  "main": "index",
+  "main": "index.js",
+  "directories": {
+    "lib": "./lib"
+  },
+  "files": [
+    "index.js",
+    "lib/"
+  ],
   "scripts": {
     "eslint": "eslint .",
     "test": "mocha test/index.js",
@@ -45,3 +52,4 @@
     "nyc": "^14.1.1"
   }
 }
+
