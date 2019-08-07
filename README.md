@@ -1,4 +1,4 @@
-# RSS migrator
+# hexo-migrator-rss
 
 [![Build Status](https://travis-ci.org/hexojs/hexo-migrator-rss.svg?branch=master)](https://travis-ci.org/hexojs/hexo-migrator-rss)
 [![NPM version](https://badge.fury.io/js/hexo-migrator-rss.svg)](https://www.npmjs.com/package/hexo-migrator-rss)
