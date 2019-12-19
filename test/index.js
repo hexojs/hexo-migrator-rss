@@ -28,8 +28,29 @@ describe('migrator', function() {
     });
   });
 
-  context('alias flag not passed', function() {
+  context('local file', function() {
+    it('creates posts using a local RSS file', function(done) {
+      fakeHexo.call('migrate', { _: ['rss', './test/fixtures/rss.xml'] },
+        function(err) {
+          if (err) throw err;
+          fakeHexo.setValues.receivedPosts.length.should.be.gt(0);
+          done();
+        });
+    });
+  });
 
+  context('No description', function() {
+    it('a post with empty description', function(done) {
+      fakeHexo.call('migrate', { _: ['rss', './test/fixtures/rss.xml'] },
+        function(err) {
+          if (err) throw err;
+          fakeHexo.setValues.receivedPosts[0].content.should.equal('');
+          done();
+        });
+    });
+  });
+
+  context('alias flag not passed', function() {
     it('creates posts without alias field', function(done) {
       fakeHexo.call('migrate', { _: ['rss', 'https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml'] },
         function(err) {
