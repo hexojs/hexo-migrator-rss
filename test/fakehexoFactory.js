@@ -2,7 +2,7 @@
 
 // Return mock hexo for unit testing.
 exports.create = function() {
-  var mock = {};
+  const mock = {};
   mock.setValues
   = {
       registeredType: null,

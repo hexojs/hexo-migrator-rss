@@ -1,26 +1,26 @@
 'use strict';
 
 var should = require('chai').should(); // eslint-disable-line
-var migrator = require('../lib/migrator.js');
-var fakehexoFactory = require('./fakehexoFactory.js');
-var fakeHexo;
+const migrator = require('../lib/migrator.js');
+const fakehexoFactory = require('./fakehexoFactory.js');
+let fakeHexo;
 
 describe('migrator', function() {
 
   this.timeout(10000);
 
-  beforeEach(function() {
+  beforeEach(() => {
     fakeHexo = fakehexoFactory.create();
     migrator.registerMigrator(fakeHexo);
   });
 
-  it('registers rss', function() {
+  it('registers rss', () => {
     fakeHexo.setValues.registeredType.should.equal('rss');
   });
 
-  context('called with "rss"', function() {
-    it('passes parameter through', function(done) {
-      fakeHexo.call('migrate', { _: ['rss'] }, function(err) {
+  context('called with "rss"', () => {
+    it('passes parameter through', done => {
+      fakeHexo.call('migrate', { _: ['rss'] }, err => {
         if (err) throw err;
         fakeHexo.setValues.calledType.should.equal('rss');
         done();
@@ -28,10 +28,10 @@ describe('migrator', function() {
     });
   });
 
-  context('local file', function() {
-    it('creates posts using a local RSS file', function(done) {
+  context('local file', () => {
+    it('creates posts using a local RSS file', done => {
       fakeHexo.call('migrate', { _: ['rss', './test/fixtures/rss.xml'] },
-        function(err) {
+        err => {
           if (err) throw err;
           fakeHexo.setValues.receivedPosts.length.should.be.gt(0);
           done();
@@ -39,10 +39,10 @@ describe('migrator', function() {
     });
   });
 
-  context('No description', function() {
-    it('a post with empty description', function(done) {
+  context('No description', () => {
+    it('a post with empty description', done => {
       fakeHexo.call('migrate', { _: ['rss', './test/fixtures/rss.xml'] },
-        function(err) {
+        err => {
           if (err) throw err;
           fakeHexo.setValues.receivedPosts[0].content.should.equal('');
           done();
@@ -50,10 +50,10 @@ describe('migrator', function() {
     });
   });
 
-  context('alias flag not passed', function() {
-    it('creates posts without alias field', function(done) {
+  context('alias flag not passed', () => {
+    it('creates posts without alias field', done => {
       fakeHexo.call('migrate', { _: ['rss', 'https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml'] },
-        function(err) {
+        err => {
           if (err) throw err;
           fakeHexo.setValues.receivedPosts.length.should.be.gt(0);
           should.not.exist(fakeHexo.setValues.receivedPosts[0].alias);
@@ -62,10 +62,10 @@ describe('migrator', function() {
     });
   });
 
-  context('alias flag passed', function() {
-    it('creates posts with alias field', function(done) {
+  context('alias flag passed', () => {
+    it('creates posts with alias field', done => {
       fakeHexo.call('migrate', { _: ['rss', 'https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml'], alias: true },
-        function(err) {
+        err => {
           if (err) throw err;
           fakeHexo.setValues.receivedPosts.length.should.be.gt(0);
           should.exist(fakeHexo.setValues.receivedPosts[0].alias, 'alias missing');
