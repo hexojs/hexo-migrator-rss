@@ -33,10 +33,7 @@
   "maintainers": [
     "Abner Chou <hi@abnerchou.me> (http://abnerchou.me)"
   ],
-  "license": {
-    "type": "MIT",
-    "url": "https://raw.github.com/hexojs/hexo-migrator-rss/master/LICENSE"
-  },
+  "license": "MIT",
   "dependencies": {
     "async": "^3.1.0",
     "feedparser": "^2.2.9",
