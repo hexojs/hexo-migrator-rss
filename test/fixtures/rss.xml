@@ -15,9 +15,10 @@
          <title>Star City</title>
          <author>writer@example.com (Writer)</author>
          <link>http://liftoff.msfc.nasa.gov/news/2003/news-starcity.asp</link>
-         <description></description>
+         <description>hello world</description>
          <pubDate>Tue, 03 Jun 2003 09:39:21 GMT</pubDate>
          <guid>http://liftoff.msfc.nasa.gov/2003/06/03.html#item573</guid>
+         <category>star</category>
       </item>
    </channel>
 </rss>

@@ -30,16 +30,17 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "async": "^3.1.0",
-    "feedparser": "^2.2.9",
+    "camaro": "^4.1.2",
+    "hexo-fs": "^2.0.0",
     "request": "^2.36.0",
-    "turndown": "^5.0.3",
-    "url": "^0.11.0"
+    "request-promise-native": "^1.0.8",
+    "turndown": "^5.0.3"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "eslint": "^6.0.1",
     "eslint-config-hexo": "^4.1.0",
+    "hexo": "^4.1.1",
     "mocha": "^6.2.0",
     "nyc": "^15.0.0"
   },
@@ -47,4 +48,3 @@
     "node": ">=8.6.0"
   }
 }
-
