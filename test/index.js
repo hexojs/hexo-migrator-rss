@@ -48,7 +48,7 @@ describe('migrator', () => {
     try {
       await m({ _: [path] });
     } catch (err) {
-      err.message.should.eql(`Error: ENOENT: no such file or directory, open '${path}'`);
+      err.message.includes('Error: ENOENT: no such file or directory').should.eql(true);
     }
   });
 });
