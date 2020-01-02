@@ -7,7 +7,9 @@ const Hexo = require('hexo');
 const hexo = new Hexo(__dirname);
 const m = require('../lib/migrator.js').bind(hexo);
 
-describe('migrator', () => {
+describe('migrator', function() {
+  this.timeout(5000);
+
   before(() => hexo.init());
 
   it('default - file', async () => {
