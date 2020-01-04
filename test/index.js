@@ -4,7 +4,7 @@ require('chai').should();
 const { join } = require('path');
 const { exists, listDir, readFile, rmdir } = require('hexo-fs');
 const Hexo = require('hexo');
-const hexo = new Hexo(__dirname);
+const hexo = new Hexo(__dirname, { silent: true });
 const m = require('../lib/migrator.js').bind(hexo);
 const parseFeed = require('../lib/feed');
 
