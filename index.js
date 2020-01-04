@@ -1,7 +1,4 @@
 /* global hexo */
 'use strict';
 
-const migrator = require('./lib/migrator.js');
-
-migrator.registerMigrator(hexo);
-
+hexo.extend.migrator.register('rss', require('./lib/migrator'));

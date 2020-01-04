@@ -1,77 +1,56 @@
 'use strict';
 
-var should = require('chai').should(); // eslint-disable-line
-const migrator = require('../lib/migrator.js');
-const fakehexoFactory = require('./fakehexoFactory.js');
-let fakeHexo;
+require('chai').should();
+const { join } = require('path');
+const { exists, rmdir } = require('hexo-fs');
+const Hexo = require('hexo');
+const hexo = new Hexo(__dirname);
+const m = require('../lib/migrator.js').bind(hexo);
 
 describe('migrator', function() {
+  this.timeout(5000);
 
-  this.timeout(10000);
+  before(() => hexo.init());
 
-  beforeEach(() => {
-    fakeHexo = fakehexoFactory.create();
-    migrator.registerMigrator(fakeHexo);
+  it('default - file', async () => {
+    await m({ _: [join(__dirname, 'fixtures/rss.xml')] });
+    const exist = await exists(join(hexo.source_dir, '_posts', 'Star-City.md'));
+    exist.should.eql(true);
+
+    await rmdir(hexo.source_dir);
   });
 
-  it('registers rss', () => {
-    fakeHexo.setValues.registeredType.should.equal('rss');
+  it('default - url', async () => {
+    await m({ _: ['https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml'] });
+    const exist = await exists(join(hexo.source_dir, '_posts', 'The-Engine-That-Does-More.md'));
+    exist.should.eql(true);
+
+    await rmdir(hexo.source_dir);
   });
 
-  context('called with "rss"', () => {
-    it('passes parameter through', done => {
-      fakeHexo.call('migrate', { _: ['rss'] }, err => {
-        if (err) throw err;
-        fakeHexo.setValues.calledType.should.equal('rss');
-        done();
-      });
-    });
+  it('no argument', async () => {
+    try {
+      await m({ _: [''] });
+    } catch (err) {
+      err.message.split('\n')[0].should.eql('Usage: hexo migrate rss <source> [--alias]');
+    }
   });
 
-  context('local file', () => {
-    it('creates posts using a local RSS file', done => {
-      fakeHexo.call('migrate', { _: ['rss', './test/fixtures/rss.xml'] },
-        err => {
-          if (err) throw err;
-          fakeHexo.setValues.receivedPosts.length.should.be.gt(0);
-          done();
-        });
-    });
+  it('invalid url', async () => {
+    const url = 'http://does.not.exist/';
+    try {
+      await m({ _: [url] });
+    } catch (err) {
+      err.message.includes('RequestError:').should.eql(true);
+    }
   });
 
-  context('No description', () => {
-    it('a post with empty description', done => {
-      fakeHexo.call('migrate', { _: ['rss', './test/fixtures/rss.xml'] },
-        err => {
-          if (err) throw err;
-          fakeHexo.setValues.receivedPosts[0].content.should.equal('');
-          done();
-        });
-    });
-  });
-
-  context('alias flag not passed', () => {
-    it('creates posts without alias field', done => {
-      fakeHexo.call('migrate', { _: ['rss', 'https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml'] },
-        err => {
-          if (err) throw err;
-          fakeHexo.setValues.receivedPosts.length.should.be.gt(0);
-          should.not.exist(fakeHexo.setValues.receivedPosts[0].alias);
-          done();
-        });
-    });
-  });
-
-  context('alias flag passed', () => {
-    it('creates posts with alias field', done => {
-      fakeHexo.call('migrate', { _: ['rss', 'https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml'], alias: true },
-        err => {
-          if (err) throw err;
-          fakeHexo.setValues.receivedPosts.length.should.be.gt(0);
-          should.exist(fakeHexo.setValues.receivedPosts[0].alias, 'alias missing');
-          done();
-        });
-    });
+  it('invalid path', async () => {
+    const path = 'does/not/exist';
+    try {
+      await m({ _: [path] });
+    } catch (err) {
+      err.message.includes('Error: ENOENT: no such file or directory').should.eql(true);
+    }
   });
 });
-
