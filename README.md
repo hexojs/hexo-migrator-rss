@@ -13,13 +13,17 @@ $ npm install hexo-migrator-rss --save
 
 ## Usage
 
-Execute the following command after installed. `source` is the file path or URL of RSS.  
-
-The `--alias` option populates the `alias` setting in the front-matter, for use with the [hexo-generator-alias](http://github.com/hexojs/hexo-generator-alias) module. This is useful
-for generating redirects.
+Execute the following command after installed. `source` is the file path or URL of Atom/RSS.
 
 ``` bash
-$ hexo migrate rss <source> [--alias]
+$ hexo migrate rss <source> [--options]
 ```
+
+- **alias**: Populates the `alias` setting in the front-matter, for use with the [hexo-generator-alias](http://github.com/hexojs/hexo-generator-alias) module. This is useful for generating redirects.
+- **limit**: Maximum number of posts to import from the feed. All posts are imported by default.
+  * Example:
+  ``` bash
+  $ hexo migrate rss /path/atom.xml --limit 3
+  ```
 
 [Hexo]: http://zespia.tw/hexo
