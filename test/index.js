@@ -2,22 +2,28 @@
 
 require('chai').should();
 const { join } = require('path');
-const { exists, rmdir } = require('hexo-fs');
+const { exists, listDir, readFile, rmdir } = require('hexo-fs');
 const Hexo = require('hexo');
-const hexo = new Hexo(__dirname);
+const hexo = new Hexo(__dirname, { silent: true });
 const m = require('../lib/migrator.js').bind(hexo);
+const parseFeed = require('../lib/feed');
+
 
 describe('migrator', function() {
   this.timeout(5000);
 
   before(() => hexo.init());
 
+  afterEach(async () => {
+    const exist = await exists(hexo.source_dir);
+    if (exist) await rmdir(hexo.source_dir);
+  });
+
   it('default - file', async () => {
     await m({ _: [join(__dirname, 'fixtures/rss.xml')] });
     const exist = await exists(join(hexo.source_dir, '_posts', 'Star-City.md'));
     exist.should.eql(true);
 
-    await rmdir(hexo.source_dir);
   });
 
   it('default - url', async () => {
@@ -25,7 +31,6 @@ describe('migrator', function() {
     const exist = await exists(join(hexo.source_dir, '_posts', 'The-Engine-That-Does-More.md'));
     exist.should.eql(true);
 
-    await rmdir(hexo.source_dir);
   });
 
   it('no argument', async () => {
@@ -52,5 +57,33 @@ describe('migrator', function() {
     } catch (err) {
       err.message.includes('Error: ENOENT: no such file or directory').should.eql(true);
     }
+  });
+
+  it('option - limit', async () => {
+    const path = join(__dirname, 'fixtures/rss.xml');
+    const limit = 2;
+    await m({ _: [path], limit });
+    const posts = await listDir(join(hexo.source_dir, '_posts'));
+    posts.length.should.eql(limit);
+
+    const input = await readFile(path);
+    const expected = await parseFeed(input);
+
+    // should follow order from top to bottom
+    for (let i = 0; i < limit; i++) {
+      const filename = expected.items[i].title.replace(/ /g, '-') + '.md';
+      posts[i].should.eql(filename);
+    }
+  });
+
+  it('option - invalid limit', async () => {
+    const path = join(__dirname, 'fixtures/rss.xml');
+    const limit = 9000;
+    await m({ _: [path], limit });
+    const posts = await listDir(join(hexo.source_dir, '_posts'));
+    const input = await readFile(path);
+    const expected = await parseFeed(input);
+
+    posts.length.should.eql(expected.items.length);
   });
 });
