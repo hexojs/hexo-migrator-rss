@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/hexojs/hexo-migrator-rss.svg?branch=master)](https://travis-ci.org/hexojs/hexo-migrator-rss)
 [![NPM version](https://badge.fury.io/js/hexo-migrator-rss.svg)](https://www.npmjs.com/package/hexo-migrator-rss)
 
-Migrate your blog from RSS to [Hexo].
+Migrate your blog from Atom/RSS to [Hexo].
 
 ## Install
 
@@ -26,4 +26,4 @@ $ hexo migrate rss <source> [--options]
   $ hexo migrate rss /path/atom.xml --limit 3
   ```
 
-[Hexo]: http://zespia.tw/hexo
+[Hexo]: https://hexo.io/
