@@ -7,7 +7,8 @@ const Hexo = require('hexo');
 const hexo = new Hexo(__dirname, { silent: true });
 const m = require('../lib/migrator.js').bind(hexo);
 const parseFeed = require('../lib/feed');
-
+const { spy } = require('sinon');
+const log = spy(hexo.log);
 
 describe('migrator', function() {
   this.timeout(5000);
@@ -22,15 +23,35 @@ describe('migrator', function() {
   it('default - file', async () => {
     await m({ _: [join(__dirname, 'fixtures/rss.xml')] });
     const exist = await exists(join(hexo.source_dir, '_posts', 'Star-City.md'));
-    exist.should.eql(true);
 
+    exist.should.eql(true);
+  });
+
+  it('default - logging', async () => {
+    const path = join(__dirname, 'fixtures/rss.xml');
+    await m({ _: [path] });
+
+    const input = await readFile(path);
+    const { items } = await parseFeed(input);
+
+    const { firstCall, lastCall } = log.i;
+
+    firstCall.calledWith('Analyzing %s...', path).should.eql(true);
+    lastCall.calledWith('%d posts migrated.', items.length).should.eql(true);
+  });
+
+  it('default - logging (untitled post)', async () => {
+    const path = join(__dirname, 'fixtures/rss.xml');
+    await m({ _: [path] });
+
+    log.w.calledWith('%d posts did not have titles and were prefixed with "Untitled Post".', 1).should.eql(true);
   });
 
   it('default - url', async () => {
     await m({ _: ['https://github.com/danmactough/node-feedparser/raw/master/test/feeds/rss2sample.xml'] });
     const exist = await exists(join(hexo.source_dir, '_posts', 'The-Engine-That-Does-More.md'));
-    exist.should.eql(true);
 
+    exist.should.eql(true);
   });
 
   it('no argument', async () => {
