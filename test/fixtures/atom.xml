@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Liftoff News</title>
+  <subtitle>Liftoff to Space Exploration.</subtitle>
+  <link href="http://blogs.law.harvard.edu/tech/rss" rel="self"/>
+  <link href="http://liftoff.msfc.nasa.gov/"/>
+  <updated>Tue, 10 Jun 2003 09:41:01 GMT</updated>
+  <id>http://liftoff.msfc.nasa.gov/</id>
+  <author>
+    <email>editor@example.com</email>
+  </author>
+  <generator>Weblog Editor 2.0</generator>
+  <entry>
+    <title>Star City</title>
+    <link href="http://liftoff.msfc.nasa.gov/news/2003/news-starcity.asp"/>
+    <id>http://liftoff.msfc.nasa.gov/2003/06/03.html#item573</id>
+    <published>Tue, 03 Jun 2003 09:39:21 GMT</published>
+    <summary type="html">How do Americans get ready to work with Russians aboard the International Space Station? They take a crash course in culture, language and protocol at Russia's &lt;a href="http://howe.iki.rssi.ru/GCTC/gctc_e.htm"&gt;Star City&lt;/a&gt;.</summary>
+    <category term="star"/>
+  </entry>
+  <entry>
+    <title>The Engine That Does More</title>
+    <link href="http://liftoff.msfc.nasa.gov/news/2003/news-VASIMR.asp"/>
+    <id>http://liftoff.msfc.nasa.gov/2003/05/27.html#item571</id>
+    <published>Tue, 27 May 2003 08:37:32 GMT</published>
+    <summary type="html">Before man travels to Mars, NASA hopes to design new engines that will let us fly through the Solar System more quickly. The proposed VASIMR engine would do that.</summary>
+    <category term="space travel"/>
+  </entry>
+  <entry>
+    <id>http://liftoff.msfc.nasa.gov/2003/05/30.html#item572</id>
+    <published>Fri, 30 May 2003 11:06:42 GMT</published>
+    <summary type="html">Sky watchers in Europe, Asia, and parts of Alaska and Canada will experience a &lt;a href="http://science.nasa.gov/headlines/y2003/30may_solareclipse.htm"&gt;partial eclipse of the Sun&lt;/a&gt; on Saturday, May 31st.</summary>
+    <category term="star"/>
+  </entry>
+  <entry>
+    <title>Astronauts&#39; Dirty Laundry</title>
+    <link href="http://liftoff.msfc.nasa.gov/news/2003/news-laundry.asp"/>
+    <id>http://liftoff.msfc.nasa.gov/2003/05/20.html#item570</id>
+    <published>Tue, 20 May 2003 08:56:02 GMT</published>
+    <summary type="html">Compared to earlier spacecraft, the International Space Station has many luxuries, but laundry facilities are not one of them. Instead, astronauts have other options.</summary>
+    <category term="space travel"/>
+  </entry>
+</feed>
