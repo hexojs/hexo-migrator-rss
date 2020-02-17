@@ -2,9 +2,9 @@
 
 require('chai').should();
 const { join } = require('path');
-const { exists, listDir, readFile, rmdir } = require('hexo-fs');
+const { exists, listDir, readFile, rmdir, writeFile } = require('hexo-fs');
 const Hexo = require('hexo');
-const hexo = new Hexo(__dirname, { silent: true });
+const hexo = new Hexo(process.cwd(), { silent: true });
 const m = require('../lib/migrator.js').bind(hexo);
 const parseFeed = require('../lib/feed');
 const { spy } = require('sinon');
@@ -113,5 +113,40 @@ describe('migrator', function() {
     const expected = await parseFeed(input);
 
     posts.length.should.eql(expected.items.length);
+  });
+
+  it('option - skipduplicate', async () => {
+    const path = join(__dirname, 'fixtures/atom.xml');
+    const postDir = join(hexo.source_dir, '_posts');
+    await writeFile(join(postDir, 'Star-City.md'), 'foo');
+    await m({ _: [path], skipduplicate: true });
+    const posts = await listDir(postDir);
+    const input = await readFile(path);
+    const expected = await parseFeed(input);
+
+    posts.length.should.eql(expected.items.length);
+  });
+
+  it('option - skipduplicate (no existing post)', async () => {
+    const path = join(__dirname, 'fixtures/atom.xml');
+    const postDir = join(hexo.source_dir, '_posts');
+    await m({ _: [path], skipduplicate: true });
+    const posts = await listDir(postDir);
+    const input = await readFile(path);
+    const expected = await parseFeed(input);
+
+    posts.length.should.eql(expected.items.length);
+  });
+
+  it('option - skipduplicate disabled', async () => {
+    const path = join(__dirname, 'fixtures/atom.xml');
+    const postDir = join(hexo.source_dir, '_posts');
+    await writeFile(join(postDir, 'Star-City.md'), 'foo');
+    await m({ _: [path] });
+    const posts = await listDir(postDir);
+    const input = await readFile(path);
+    const expected = await parseFeed(input);
+
+    posts.length.should.not.eql(expected.items.length);
   });
 });
