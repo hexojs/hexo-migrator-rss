@@ -54,6 +54,13 @@ describe('migrator', function() {
     exist.should.eql(true);
   });
 
+  it('default - atom', async () => {
+    await m({ _: [join(__dirname, 'fixtures/atom.xml')] });
+    const exist = await exists(join(hexo.source_dir, '_posts', 'Star-City.md'));
+
+    exist.should.eql(true);
+  });
+
   it('no argument', async () => {
     try {
       await m({ _: [''] });
