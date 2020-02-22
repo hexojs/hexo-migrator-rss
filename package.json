@@ -32,6 +32,7 @@
   "dependencies": {
     "camaro": "^4.1.2",
     "hexo-fs": "^2.0.0",
+    "hexo-util": "^1.8.0",
     "got": "^10.2.1",
     "turndown": "^5.0.3"
   },

@@ -25,5 +25,9 @@ $ hexo migrate rss <source> [--options]
   ``` bash
   $ hexo migrate rss /path/atom.xml --limit 3
   ```
+- **skipduplicate**: Skip posts with similar title as existing ones.
+  * If a feed contains a post titled 'Foo Bar' and there is an existing post named 'Foo-Bar.md', then that post will not be migrated.
+  * The comparison is case-insensitive; a post titled 'FOO BAR' will be skipped if 'foo-bar.md' exists.
+  * Without this option (default), this plugin will continue to migrate that post and create a post named 'Foo-Bar-1.md'
 
 [Hexo]: https://hexo.io/
