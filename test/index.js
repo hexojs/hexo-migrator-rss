@@ -27,6 +27,13 @@ describe('migrator', function() {
     exist.should.eql(true);
   });
 
+  it('unicode', async () => {
+    await m({ _: [join(__dirname, 'fixtures/atom.xml')] });
+    const exist = await exists(join(hexo.source_dir, '_posts', '静夜思.md'));
+
+    exist.should.eql(true);
+  });
+
   it('default - logging', async () => {
     const path = join(__dirname, 'fixtures/rss.xml');
     await m({ _: [path] });
