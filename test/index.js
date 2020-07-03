@@ -75,6 +75,21 @@ describe('migrator', function() {
     exist.should.eql(true);
   });
 
+  it('title with double quotes', async () => {
+    const { slugize } = require('hexo-util');
+
+    const title = 'lorem "ipsum"';
+    const xml = `<feed><title>test</title><entry><title>${title}</title></entry></feed>`;
+    const path = join(__dirname, 'atom-test.xml');
+    await writeFile(path, xml);
+    await m({ _: [path] });
+
+    const post = await readFile(join(hexo.source_dir, '_posts', slugize(title) + '.md'));
+    post.includes('title: ' + title).should.eql(true);
+
+    await unlink(path);
+  });
+
   it('excerpt - summary element', async () => {
     const { unescapeHTML } = require('hexo-util');
 
