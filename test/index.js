@@ -2,13 +2,20 @@
 
 require('chai').should();
 const { join } = require('path');
-const { exists, listDir, readFile, rmdir, writeFile } = require('hexo-fs');
+const { exists, listDir, readFile, rmdir, unlink, writeFile } = require('hexo-fs');
+const TurndownService = require('turndown');
+const tomd = new TurndownService();
 const Hexo = require('hexo');
 const hexo = new Hexo(process.cwd(), { silent: true });
 const m = require('../lib/migrator.js').bind(hexo);
 const parseFeed = require('../lib/feed');
 const { spy } = require('sinon');
 const log = spy(hexo.log);
+const rFrontMatter = /^([\s\S]+?)\n(-{3,}|;{3,})(?:$|\n([\s\S]*)$)/;
+
+const md = str => {
+  return tomd.turndown(str);
+};
 
 describe('migrator', function() {
   this.timeout(5000);
@@ -66,6 +73,71 @@ describe('migrator', function() {
     const exist = await exists(join(hexo.source_dir, '_posts', 'Star-City.md'));
 
     exist.should.eql(true);
+  });
+
+  it('excerpt - summary element', async () => {
+    const { unescapeHTML } = require('hexo-util');
+
+    const summary = '&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt;';
+    const content = 'foo';
+    const xml = `<feed><title>test</title>
+    <entry><title>test</title><content type="html"><![CDATA[${content}]]></content>
+    <summary type="html">${summary}</summary></entry></feed>`;
+    const path = join(__dirname, 'atom-test.xml');
+    await writeFile(path, xml);
+    await m({ _: [path] });
+
+    const html = unescapeHTML(summary);
+    const markdown = md(html);
+
+    const post = await readFile(join(hexo.source_dir, '_posts', 'test.md'));
+    const output = post.match(rFrontMatter)[3].replace(/\r?\n|\r/g, '');
+
+    output.should.eql(markdown + '<!-- more -->' + content);
+
+    await unlink(path);
+  });
+
+  it('excerpt - duplicate excerpts', async () => {
+    const { unescapeHTML } = require('hexo-util');
+
+    const summary = '&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt;';
+    const content = 'foo';
+    const xml = `<feed><title>test</title>
+    <entry><title>test</title>
+    <content type="html"><![CDATA[${unescapeHTML(summary)}<a id="more"></a>${content}]]></content>
+    <summary type="html">${summary}</summary></entry></feed>`;
+    const path = join(__dirname, 'atom-test.xml');
+    await writeFile(path, xml);
+    await m({ _: [path] });
+
+    const html = unescapeHTML(summary);
+    const markdown = md(html);
+
+    const post = await readFile(join(hexo.source_dir, '_posts', 'test.md'));
+    const output = post.match(rFrontMatter)[3].replace(/\r?\n|\r/g, '');
+
+    output.should.eql(markdown + '<!-- more -->' + content);
+
+    await unlink(path);
+  });
+
+  it('excerpt - "more" tag', async () => {
+    const excerpt = 'f<em>o</em>o';
+    const moreTag = '<!-- more -->';
+    const content = 'b<em>a</em>r';
+    const xml = `<feed><title>test</title><entry><title>test</title>
+    <content type="html"><![CDATA[${excerpt}${moreTag}${content}]]></content></entry></feed>`;
+    const path = join(__dirname, 'atom-test.xml');
+    await writeFile(path, xml);
+    await m({ _: [path] });
+
+    const post = await readFile(join(hexo.source_dir, '_posts', 'test.md'));
+    const output = post.match(rFrontMatter)[3].replace(/\r?\n|\r/g, '');
+
+    output.should.eql(md(excerpt) + moreTag + md(content));
+
+    await unlink(path);
   });
 
   it('no argument', async () => {
