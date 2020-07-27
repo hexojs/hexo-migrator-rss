@@ -3,7 +3,7 @@
 require('chai').should();
 const { join } = require('path');
 const { exists, listDir, readFile, rmdir, unlink, writeFile } = require('hexo-fs');
-const { unescapeHTML } = require('hexo-util');
+const { slugize, escapeHTML, unescapeHTML } = require('hexo-util');
 const TurndownService = require('turndown');
 const tomd = new TurndownService();
 const Hexo = require('hexo');
@@ -76,10 +76,21 @@ describe('migrator', function() {
   });
 
   it('title with double quotes', async () => {
-    const { slugize } = require('hexo-util');
-
     const title = 'lorem "ipsum"';
     const xml = `<feed><title>test</title><entry><title>${title}</title></entry></feed>`;
+    const path = join(__dirname, 'atom-test.xml');
+    await writeFile(path, xml);
+    await m({ _: [path] });
+
+    const post = await readFile(join(hexo.source_dir, '_posts', slugize(title) + '.md'));
+    post.includes('title: ' + title).should.eql(true);
+
+    await unlink(path);
+  });
+
+  it('title with escaped character', async () => {
+    const title = 'lorem & "ipsum"';
+    const xml = `<feed><title>test</title><entry><title>${escapeHTML(title)}</title></entry></feed>`;
     const path = join(__dirname, 'atom-test.xml');
     await writeFile(path, xml);
     await m({ _: [path] });
