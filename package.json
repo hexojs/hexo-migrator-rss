@@ -1,6 +1,6 @@
 {
   "name": "hexo-migrator-rss",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "RSS migrator plugin for Hexo",
   "main": "index.js",
   "directories": {
@@ -46,6 +46,6 @@
     "sinon": "^9.0.2"
   },
   "engines": {
-    "node": ">=12.13.0"
+    "node": ">=12.13.0 <13 || >=14"
   }
 }
