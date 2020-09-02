@@ -262,4 +262,20 @@ describe('migrator', function() {
 
     posts.length.should.not.eql(expected.items.length);
   });
+
+  // hexojs/hexo-migrator-wordpress#105
+  it('sanitize input', async () => {
+    const title = 'foo';
+    const content = 'foo\x00\x11bar';
+    const xml = `<feed><title>test</title>
+    <entry><title>${title}</title><content>${content}</content></entry></feed>`;
+    const path = join(__dirname, 'atom-test.xml');
+    await writeFile(path, xml);
+    await m({ _: [path] });
+
+    const post = await readFile(join(hexo.source_dir, '_posts', slugize(title) + '.md'));
+    post.should.include('foobar');
+
+    await unlink(path);
+  });
 });
