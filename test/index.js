@@ -196,7 +196,7 @@ describe('migrator', function() {
   });
 
   it('invalid url', async () => {
-    const url = 'http://does.not.exist/';
+    const url = 'http://foo.invalid/';
     try {
       await m({ _: [url] });
     } catch (err) {
