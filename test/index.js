@@ -88,6 +88,19 @@ describe('migrator', function() {
     await unlink(path);
   });
 
+  it('title with double quotes and semicolon', async () => {
+    const title = 'lorem: "ipsum"';
+    const xml = `<feed><title>test</title><entry><title>${title}</title></entry></feed>`;
+    const path = join(__dirname, 'atom-test.xml');
+    await writeFile(path, xml);
+    await m({ _: [path] });
+
+    const post = await readFile(join(hexo.source_dir, '_posts', slugize(title) + '.md'));
+    post.includes('title: \'' + title + '\'').should.eql(true);
+
+    await unlink(path);
+  });
+
   it('title with escaped character', async () => {
     const title = 'lorem & "ipsum"';
     const xml = `<feed><title>test</title><entry><title>${escapeHTML(title)}</title></entry></feed>`;
