@@ -31,7 +31,7 @@
   "license": "MIT",
   "dependencies": {
     "camaro": "^6.0.2",
-    "hexo-fs": "^3.0.1",
+    "hexo-fs": "^4.1.1",
     "hexo-util": "^2.1.0",
     "got": "^11.0.1",
     "turndown": "^6.0.0"
