@@ -1,6 +1,6 @@
 # hexo-migrator-rss
 
-[![Build Status](https://travis-ci.org/hexojs/hexo-migrator-rss.svg?branch=master)](https://travis-ci.org/hexojs/hexo-migrator-rss)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/hexojs/hexo-migrator-rss/tester.yml?branch=master&label=test)](https://github.com/hexojs/hexo-migrator-rss/actions?query=workflow%3ATester)
 [![NPM version](https://badge.fury.io/js/hexo-migrator-rss.svg)](https://www.npmjs.com/package/hexo-migrator-rss)
 
 Migrate your blog from Atom/RSS to [Hexo].
